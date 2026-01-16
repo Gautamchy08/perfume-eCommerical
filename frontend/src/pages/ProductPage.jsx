@@ -17,6 +17,8 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
 import {
   FaStar,
   FaHeart,
@@ -29,6 +31,7 @@ import {
   FaCopy
 } from 'react-icons/fa'
 import { getProductById, getProductReviews, addReview } from '../services/api'
+import { ProductPageSkeleton } from '../components/Skeleton'
 
 const ProductPage = () => {
   // Get product ID from URL (e.g., /product/abc123 → id = "abc123")
@@ -103,8 +106,8 @@ const ProductPage = () => {
     fetchData()
   }, [id])
 
-  /**
-   * Handle review form input changes
+  /*
+    Handle review form input changes
    */
   const handleReviewInputChange = e => {
     const { name, value } = e.target
@@ -114,17 +117,25 @@ const ProductPage = () => {
     }))
   }
 
-  /**
-   * Handle review submission
+  /*
+    Handle review submission
    */
   const handleReviewSubmit = async e => {
     e.preventDefault()
+    console.log('Form submitted!') // Debug log
 
     // Validate form
     if (!reviewForm.userName || !reviewForm.comment) {
-      alert('Please fill in all fields')
+      toast.error('Please fill in all fields')
       return
     }
+
+    console.log('Sending review data:', {
+      productId: id,
+      userName: reviewForm.userName,
+      rating: parseInt(reviewForm.rating),
+      comment: reviewForm.comment
+    }) // Debug log
 
     try {
       setSubmittingReview(true)
@@ -137,6 +148,8 @@ const ProductPage = () => {
         comment: reviewForm.comment
       })
 
+      console.log('API Response:', response) // Debug log
+
       if (response.success) {
         // Add new review to the list
         setReviews(prev => [response.data, ...prev])
@@ -148,11 +161,11 @@ const ProductPage = () => {
           comment: ''
         })
 
-        alert('Review added successfully!')
+        toast.success('Review added successfully! 🎉')
       }
     } catch (err) {
       console.error('Error adding review:', err)
-      alert('Failed to add review. Please try again.')
+      toast.error('Failed to add review. Please try again.')
     } finally {
       setSubmittingReview(false)
     }
@@ -194,26 +207,21 @@ const ProductPage = () => {
     alert('Link copied to clipboard!')
   }
 
-  // Loading state
+  // Loading state - Show skeleton
   if (loading) {
-    return (
-      <div className='min-h-screen flex justify-center items-center'>
-        <div className='animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent'></div>
-        <span className='ml-4 text-gray-600'>Loading product...</span>
-      </div>
-    )
+    return <ProductPageSkeleton />
   }
 
   // Error state
   if (error || !product) {
     return (
-      <div className='min-h-screen flex flex-col justify-center items-center'>
+      <div className='min-h-screen flex flex-col justify-center items-center bg-gray-50 dark:bg-gray-900'>
         <p className='text-red-500 text-lg mb-4'>
           {error || 'Product not found'}
         </p>
         <Link
           to='/'
-          className='text-purple-600 hover:underline flex items-center gap-2'
+          className='text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-2'
         >
           <FaArrowLeft /> Back to Home
         </Link>
@@ -227,39 +235,39 @@ const ProductPage = () => {
     : 0
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8'>
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-300'>
       <div className='container mx-auto px-4'>
         {/* Back Button */}
         <Link
           to='/'
-          className='inline-flex items-center gap-2 text-gray-600 hover:text-purple-600 mb-6'
+          className='inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 mb-6'
         >
           <FaArrowLeft /> Back to Products
         </Link>
 
         {/* Main Product Section */}
-        <div className='bg-white rounded-2xl shadow-lg overflow-hidden'>
+        <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 overflow-hidden transition-colors duration-300'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 lg:p-10'>
             {/* Left Side - Image Gallery */}
             <div className='space-y-4'>
-              {/* Main Image */}
-              <div className='aspect-square rounded-xl overflow-hidden bg-gray-100'>
+              {/* Main Image with Elegant Effect */}
+              <div className='product-image-container aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 shadow-inner'>
                 <img
                   src={product.images[selectedImage]}
                   alt={product.name}
-                  className='w-full h-full object-cover hover:scale-105 transition-transform duration-500'
+                  className='main-product-image w-full h-full object-cover'
                 />
               </div>
 
-              {/* Thumbnail Images */}
+              {/* Thumbnail Images with Glow Effect */}
               <div className='flex gap-3 overflow-x-auto pb-2'>
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`thumbnail flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 ${
                       selectedImage === index
-                        ? 'border-purple-600 shadow-md'
+                        ? 'border-purple-600 shadow-lg glow-effect scale-105'
                         : 'border-gray-200 hover:border-purple-400'
                     }`}
                   >
@@ -276,12 +284,12 @@ const ProductPage = () => {
             {/* Right Side - Product Details */}
             <div className='space-y-6'>
               {/* Brand */}
-              <span className='text-sm text-gray-500 uppercase tracking-wider'>
+              <span className='text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                 {product.brand}
               </span>
 
               {/* Product Name */}
-              <h1 className='text-3xl lg:text-4xl font-bold text-gray-800'>
+              <h1 className='text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100'>
                 {product.name}
               </h1>
 
@@ -294,28 +302,28 @@ const ProductPage = () => {
                       className={`${
                         index < Math.round(product.rating)
                           ? 'text-yellow-400'
-                          : 'text-gray-300'
+                          : 'text-gray-300 dark:text-gray-600'
                       }`}
                       size={20}
                     />
                   ))}
                 </div>
-                <span className='text-gray-600'>
+                <span className='text-gray-600 dark:text-gray-400'>
                   ({product.rating}) • {product.numReviews} reviews
                 </span>
               </div>
 
               {/* Price */}
               <div className='flex items-center gap-4'>
-                <span className='text-3xl font-bold text-purple-600'>
+                <span className='text-3xl font-bold text-purple-600 dark:text-purple-400'>
                   ₹{product.price.toLocaleString()}
                 </span>
                 {product.oldPrice && (
                   <>
-                    <span className='text-xl text-gray-400 line-through'>
+                    <span className='text-xl text-gray-400 dark:text-gray-500 line-through'>
                       ₹{product.oldPrice.toLocaleString()}
                     </span>
-                    <span className='bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-semibold'>
+                    <span className='bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-3 py-1 rounded-full text-sm font-semibold'>
                       {discountPercent}% OFF
                     </span>
                   </>
@@ -324,17 +332,17 @@ const ProductPage = () => {
 
               {/* Full Description */}
               <div>
-                <h3 className='font-semibold text-gray-800 mb-2'>
+                <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-2'>
                   Description
                 </h3>
-                <p className='text-gray-600 leading-relaxed'>
+                <p className='text-gray-600 dark:text-gray-400 leading-relaxed'>
                   {product.fullDescription}
                 </p>
               </div>
 
               {/* Available Sizes */}
               <div>
-                <h3 className='font-semibold text-gray-800 mb-3'>
+                <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-3'>
                   Available Sizes
                 </h3>
                 <div className='flex flex-wrap gap-3'>
@@ -345,7 +353,7 @@ const ProductPage = () => {
                       className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
                         selectedSize === size
                           ? 'border-purple-600 bg-purple-600 text-white'
-                          : 'border-gray-300 text-gray-700 hover:border-purple-400'
+                          : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-purple-400'
                       }`}
                     >
                       {size}
@@ -373,28 +381,45 @@ const ProductPage = () => {
               {/* Action Buttons */}
               <div className='flex flex-wrap gap-4 pt-4'>
                 {/* Add to Cart */}
-                <button className='flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-semibold flex items-center justify-center gap-2 transition-colors'>
+                <motion.button
+                  className='flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full font-semibold flex items-center justify-center gap-2 shadow-lg'
+                  whileHover={{
+                    y:-4,
+                    scale: 1.1,
+                    boxShadow: '0 15px 35px rgba(147, 51, 234, 0.4)'
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                >
                   <FaShoppingCart /> Add to Cart
-                </button>
+                </motion.button>
 
                 {/* Wishlist */}
-                <button className='p-3 border-2 border-gray-300 rounded-full hover:border-pink-500 hover:text-pink-500 transition-colors'>
+                <motion.button
+                  className='p-3 border-2 border-gray-300 dark:border-gray-600 rounded-full hover:border-pink-500 hover:text-pink-500 text-gray-700 dark:text-gray-300 transition-colors'
+                  whileHover={{ scale: 1.15, rotate: 10 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                >
                   <FaHeart size={20} />
-                </button>
+                </motion.button>
 
                 {/* Share Button */}
                 <div className='relative'>
-                  <button
+                  <motion.button
                     onClick={() => setShowSharePopup(!showSharePopup)}
-                    className='p-3 border-2 border-gray-300 rounded-full hover:border-purple-500 hover:text-purple-500 transition-colors'
+                    className='p-3 border-2 border-gray-300 dark:border-gray-600 rounded-full hover:border-purple-500 hover:text-purple-500 text-gray-700 dark:text-gray-300 transition-colors'
+                    whileHover={{ scale: 1.15, rotate: -10 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                   >
                     <FaShare size={20} />
-                  </button>
+                  </motion.button>
 
                   {/* Share Popup */}
                   {showSharePopup && (
-                    <div className='absolute right-0 mt-2 bg-white shadow-xl rounded-xl p-4 z-10 min-w-[200px]'>
-                      <p className='text-gray-600 text-sm mb-3 font-medium'>
+                    <div className='absolute right-0 mt-2 bg-white dark:bg-gray-800 shadow-xl dark:shadow-gray-900/50 rounded-xl p-4 z-10 min-w-[200px]'>
+                      <p className='text-gray-600 dark:text-gray-400 text-sm mb-3 font-medium'>
                         Share on:
                       </p>
                       <div className='flex gap-3'>
@@ -432,22 +457,22 @@ const ProductPage = () => {
         </div>
 
         {/* Reviews Section */}
-        <div className='mt-10 bg-white rounded-2xl shadow-lg p-6 lg:p-10'>
-          <h2 className='text-2xl font-bold text-gray-800 mb-6'>
+        <div className='mt-10 bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 p-6 lg:p-10 transition-colors duration-300'>
+          <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6'>
             Customer Reviews ({reviews.length})
           </h2>
 
           <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
             {/* Add Review Form */}
             <div className='lg:col-span-1'>
-              <div className='bg-gray-50 rounded-xl p-6'>
-                <h3 className='font-semibold text-gray-800 mb-4'>
+              <div className='bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6'>
+                <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-4'>
                   Write a Review
                 </h3>
                 <form onSubmit={handleReviewSubmit} className='space-y-4'>
                   {/* Name Input */}
                   <div>
-                    <label className='block text-sm text-gray-600 mb-1'>
+                    <label className='block text-sm text-gray-600 dark:text-gray-400 mb-1'>
                       Your Name
                     </label>
                     <input
@@ -456,21 +481,21 @@ const ProductPage = () => {
                       value={reviewForm.userName}
                       onChange={handleReviewInputChange}
                       placeholder='Enter your name'
-                      className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500'
+                      className='w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500'
                       required
                     />
                   </div>
 
                   {/* Rating Select */}
                   <div>
-                    <label className='block text-sm text-gray-600 mb-1'>
+                    <label className='block text-sm text-gray-600 dark:text-gray-400 mb-1'>
                       Rating
                     </label>
                     <select
                       name='rating'
                       value={reviewForm.rating}
                       onChange={handleReviewInputChange}
-                      className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500'
+                      className='w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200'
                     >
                       <option value={5}>⭐⭐⭐⭐⭐ (5 Stars)</option>
                       <option value={4}>⭐⭐⭐⭐ (4 Stars)</option>
@@ -482,7 +507,7 @@ const ProductPage = () => {
 
                   {/* Comment Textarea */}
                   <div>
-                    <label className='block text-sm text-gray-600 mb-1'>
+                    <label className='block text-sm text-gray-600 dark:text-gray-400 mb-1'>
                       Your Review
                     </label>
                     <textarea
@@ -491,19 +516,25 @@ const ProductPage = () => {
                       onChange={handleReviewInputChange}
                       placeholder='Share your experience...'
                       rows={4}
-                      className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 resize-none'
+                      className='w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 resize-none'
                       required
                     ></textarea>
                   </div>
 
                   {/* Submit Button */}
-                  <button
+                  <motion.button
                     type='submit'
                     disabled={submittingReview}
-                    className='w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg font-semibold transition-colors disabled:opacity-50'
+                    className='w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-xl font-semibold shadow-lg disabled:opacity-50'
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: '0 10px 30px rgba(147, 51, 234, 0.4)'
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                   >
                     {submittingReview ? 'Submitting...' : 'Submit Review'}
-                  </button>
+                  </motion.button>
                 </form>
               </div>
             </div>
@@ -511,7 +542,7 @@ const ProductPage = () => {
             {/* Reviews List */}
             <div className='lg:col-span-2'>
               {reviews.length === 0 ? (
-                <p className='text-gray-500 text-center py-10'>
+                <p className='text-gray-500 dark:text-gray-400 text-center py-10'>
                   No reviews yet. Be the first to review this product!
                 </p>
               ) : (
@@ -519,11 +550,11 @@ const ProductPage = () => {
                   {reviews.map(review => (
                     <div
                       key={review._id}
-                      className='bg-gray-50 rounded-xl p-4 border border-gray-100'
+                      className='bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 border border-gray-100 dark:border-gray-700'
                     >
                       <div className='flex justify-between items-start mb-2'>
                         <div>
-                          <h4 className='font-semibold text-gray-800'>
+                          <h4 className='font-semibold text-gray-800 dark:text-gray-100'>
                             {review.userName}
                           </h4>
                           <div className='flex mt-1'>
@@ -533,18 +564,20 @@ const ProductPage = () => {
                                 className={`${
                                   index < review.rating
                                     ? 'text-yellow-400'
-                                    : 'text-gray-300'
+                                    : 'text-gray-300 dark:text-gray-600'
                                 }`}
                                 size={14}
                               />
                             ))}
                           </div>
                         </div>
-                        <span className='text-sm text-gray-400'>
+                        <span className='text-sm text-gray-400 dark:text-gray-500'>
                           {new Date(review.createdAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className='text-gray-600'>{review.comment}</p>
+                      <p className='text-gray-600 dark:text-gray-400'>
+                        {review.comment}
+                      </p>
                     </div>
                   ))}
                 </div>

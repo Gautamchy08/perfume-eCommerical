@@ -11,9 +11,12 @@
  */
 
 const express = require('express')
-const mongoose = require('mongoose')
 const cors = require('cors')
 const dotenv = require('dotenv')
+const path = require('path')
+
+// Import database connection function
+const { connectDB } = require('./database/service')
 
 // Import route files
 const productRoutes = require('./routes/productRoutes')
@@ -41,21 +44,15 @@ app.use(express.json())
 // Parse URL-encoded data (form submissions)
 app.use(express.urlencoded({ extended: true }))
 
+// Serve static files from assets folder
+// This allows images to be accessed via http://localhost:5000/assets/men/1-1.png
+app.use('/assets', express.static(path.join(__dirname, 'assets')))
+
 // ============================================
 // DATABASE CONNECTION
 // ============================================
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI)
-    console.log('✅ MongoDB Connected Successfully')
-  } catch (error) {
-    console.error('❌ MongoDB Connection Error:', error.message)
-    process.exit(1) // Exit if can't connect to database
-  }
-}
-
-// Connect to MongoDB
+// Connect to MongoDB using centralized service
 connectDB()
 
 // ============================================

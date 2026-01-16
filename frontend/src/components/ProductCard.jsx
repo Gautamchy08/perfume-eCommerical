@@ -17,6 +17,7 @@
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { FaStar, FaHeart, FaShoppingCart, FaEye } from 'react-icons/fa'
 
 const ProductCard = ({ product }) => {
@@ -42,20 +43,33 @@ const ProductCard = ({ product }) => {
     : 0
 
   return (
-    <div
-      className='bg-white rounded-xl shadow-md overflow-hidden group transition-all duration-300 hover:shadow-xl'
+    <motion.div
+      className='product-card bg-white dark:bg-gray-800 rounded-2xl shadow-md dark:shadow-gray-900/30 overflow-hidden cursor-pointer transition-colors duration-300'
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => (window.location.href = `/product/${_id}`)}
+      animate={
+        isHovered
+          ? { y: 10, rotate: [0, 5, -5, 5, -5, 0] }
+          : { y: 0, rotate: 0 }
+      }
+      transition={{
+        y: { type: 'spring', stiffness: 300, damping: 20 },
+        rotate: isHovered
+          ? { duration: 0.8, ease: 'easeInOut' }
+          : { duration: 2, ease: 'easeOut' } // Fast snap back to 0
+      }}
     >
-      {/* Image Container */}
-      <div className='relative overflow-hidden h-64'>
-        {/* Primary Image - shown by default */}
+      {/* Image Container with Shine Effect */}
+      <div className='product-image-container relative h-64'>
+        {/* Primary Image */}
         <img
           src={images[0]}
           alt={name}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${
+          className={`product-image w-full h-full object-cover ${
             isHovered && images[1] ? 'opacity-0' : 'opacity-100'
           }`}
+          style={{ transition: 'opacity 0.6s ease' }}
         />
 
         {/* Secondary Image - shown on hover */}
@@ -63,106 +77,136 @@ const ProductCard = ({ product }) => {
           <img
             src={images[1]}
             alt={name}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            className={`product-image absolute inset-0 w-full h-full object-cover ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
+            style={{ transition: 'opacity 0.6s ease' }}
           />
         )}
 
-        {/* Discount Badge */}
+        {/* Discount Badge with Animation */}
         {discountPercent > 0 && (
-          <span className='absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded'>
-            -{discountPercent}%
+          <span className='badge-animate absolute top-3 left-3 bg-linear-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg'>
+            -{discountPercent}% OFF
           </span>
         )}
 
         {/* Category Badge */}
-        <span className='absolute top-3 right-3 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded'>
+        <span className='badge-animate absolute top-3 right-3 bg-linear-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg'>
           {category}
         </span>
 
-        {/* Hover Action Buttons */}
+        {/* Elegant Overlay on Hover */}
         <div
-          className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transition-all duration-300 ${
-            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          className={`absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        {/* Hover Action Buttons with Stagger Animation */}
+        <div
+          className={`action-buttons absolute bottom-4 left-0 right-0 flex justify-center gap-4 ${
+            isHovered ? 'pointer-events-auto' : 'pointer-events-none'
           }`}
         >
-          <div className='flex justify-center gap-3'>
-            {/* Add to Cart Button */}
+          {/* Add to Cart Button */}
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: -19 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          >
             <button
-              className='bg-white p-2 rounded-full hover:bg-purple-600 hover:text-white transition-colors'
+              className='btn-ripple bg-white/95 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-purple-700 hover:text-white transition-colors'
               title='Add to Cart'
+              onClick={e => e.stopPropagation()}
             >
-              <FaShoppingCart size={16} />
+              <FaShoppingCart size={18} />
             </button>
+          </motion.div>
 
-            {/* Add to Wishlist Button */}
+          {/* Add to Wishlist Button */}
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: -19 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          >
             <button
-              className='bg-white p-2 rounded-full hover:bg-pink-500 hover:text-white transition-colors'
+              className='btn-ripple bg-white/95 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-pink-500 hover:text-white transition-colors'
               title='Add to Wishlist'
+              onClick={e => e.stopPropagation()}
             >
-              <FaHeart size={16} />
+              <FaHeart size={18} />
             </button>
+          </motion.div>
 
-            {/* Quick View Button - Links to product page */}
+          {/* Quick View Button */}
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: -19 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          >
             <Link
               to={`/product/${_id}`}
-              className='bg-white p-2 rounded-full hover:bg-purple-600 hover:text-white transition-colors'
+              className='btn-ripple bg-white/95 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-purple-600 hover:text-white transition-colors flex items-center justify-center'
               title='Quick View'
+              onClick={e => e.stopPropagation()}
             >
-              <FaEye size={16} />
+              <FaEye size={18} />
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Product Details */}
-      <div className='p-4'>
-        {/* Brand */}
-        <span className='text-xs text-gray-500 uppercase tracking-wider'>
+      {/* Product Details with Subtle Animation */}
+      <div className='p-5'>
+        {/* Brand with Elegant Style */}
+        <span className='text-xs text-purple-500 dark:text-purple-400 font-medium uppercase tracking-widest'>
           {brand}
         </span>
 
-        {/* Product Name - Clickable link to product page */}
-        <Link to={`/product/${_id}`}>
-          <h3 className='text-lg font-semibold text-gray-800 mt-1 hover:text-purple-600 transition-colors line-clamp-1'>
+        {/* Product Name */}
+        <Link to={`/product/${_id}`} onClick={e => e.stopPropagation()}>
+          <h3 className='text-lg font-bold text-gray-800 dark:text-gray-100 mt-1 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 line-clamp-1'>
             {name}
           </h3>
         </Link>
 
         {/* Short Description */}
-        <p className='text-gray-500 text-sm mt-1 line-clamp-2'>
+        <p className='text-gray-500 dark:text-gray-400 text-sm mt-1 line-clamp-2 leading-relaxed'>
           {shortDescription}
         </p>
 
-        {/* Rating Stars */}
-        <div className='flex items-center mt-2'>
-          {/* Render 5 stars, filled based on rating */}
+        {/* Rating Stars with Glow */}
+        <div className='flex items-center mt-3'>
           {[...Array(5)].map((_, index) => (
             <FaStar
               key={index}
               className={`${
-                index < Math.round(rating) ? 'text-yellow-400' : 'text-gray-300'
-              }`}
+                index < Math.round(rating)
+                  ? 'text-yellow-400 drop-shadow-sm'
+                  : 'text-gray-200 dark:text-gray-600'
+              } transition-colors duration-200`}
               size={14}
             />
           ))}
-          <span className='text-gray-500 text-sm ml-2'>({rating})</span>
+          <span className='text-gray-400 dark:text-gray-500 text-sm ml-2 font-medium'>
+            ({rating})
+          </span>
         </div>
 
-        {/* Price */}
-        <div className='flex items-center gap-2 mt-3'>
-          <span className='text-xl font-bold text-purple-600'>
+        {/* Price with Gradient */}
+        <div className='flex items-center gap-3 mt-4'>
+          <span className='text-2xl font-extrabold bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent'>
             ₹{price.toLocaleString()}
           </span>
           {oldPrice && (
-            <span className='text-gray-400 line-through text-sm'>
+            <span className='text-gray-400 dark:text-gray-500 line-through text-sm'>
               ₹{oldPrice.toLocaleString()}
             </span>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

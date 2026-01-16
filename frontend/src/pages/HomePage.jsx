@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import HeroBanner from '../components/HeroBanner'
 import ProductCard from '../components/ProductCard'
+import { ProductGridSkeleton } from '../components/Skeleton'
 import { getAllProducts, getProductsByCategory } from '../services/api'
 
 const HomePage = () => {
@@ -97,14 +98,18 @@ const HomePage = () => {
       <HeroBanner />
 
       {/* Products Section */}
-      <section className='py-16 bg-gray-50'>
+      <section className='py-16 bg-gray-50 dark:bg-gray-900/50 transition-colors duration-300'>
         <div className='container mx-auto px-4'>
           {/* Section Header */}
           <div className='text-center mb-12'>
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-800 mb-4'>
-              Our <span className='text-purple-600'>Premium</span> Collection
+            <h2 className='text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4'>
+              Our{' '}
+              <span className='text-purple-600 dark:text-purple-400'>
+                Premium
+              </span>{' '}
+              Collection
             </h2>
-            <p className='text-gray-600 max-w-2xl mx-auto'>
+            <p className='text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'>
               Discover our handpicked selection of luxury perfumes. Each
               fragrance is carefully curated to help you find your perfect
               scent.
@@ -113,15 +118,15 @@ const HomePage = () => {
 
           {/* Category Filter Tabs */}
           <div className='flex justify-center mb-10'>
-            <div className='inline-flex bg-white rounded-full p-1 shadow-md'>
+            <div className='inline-flex bg-white dark:bg-gray-800 rounded-full p-1 shadow-md dark:shadow-gray-900/50'>
               {categories.map(category => (
                 <button
                   key={category}
                   onClick={() => handleCategoryClick(category)}
-                  className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                  className={`px-6 py-2 rounded-full font-medium cursor-pointer transition-all duration-300 ${
                     activeCategory === category
                       ? 'bg-purple-600 text-white shadow-md'
-                      : 'text-gray-600 hover:text-purple-600'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400'
                   }`}
                 >
                   {category}
@@ -130,21 +135,16 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Loading State */}
-          {loading && (
-            <div className='flex justify-center items-center py-20'>
-              <div className='animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent'></div>
-              <span className='ml-4 text-gray-600'>Loading products...</span>
-            </div>
-          )}
+          {/* Loading State - Skeleton */}
+          {loading && <ProductGridSkeleton count={8} />}
 
           {/* Error State */}
           {error && (
             <div className='text-center py-20'>
               <p className='text-red-500 text-lg'>{error}</p>
-              <p className='text-gray-500 mt-2'>
+              <p className='text-gray-500 dark:text-gray-400 mt-2'>
                 Make sure to run:{' '}
-                <code className='bg-gray-200 px-2 py-1 rounded'>
+                <code className='bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded'>
                   npm run dev
                 </code>{' '}
                 in the backend folder
@@ -164,7 +164,7 @@ const HomePage = () => {
           {/* No Products Found */}
           {!loading && !error && products.length === 0 && (
             <div className='text-center py-20'>
-              <p className='text-gray-500 text-lg'>
+              <p className='text-gray-500 dark:text-gray-400 text-lg'>
                 No products found in this category.
               </p>
             </div>
@@ -173,25 +173,27 @@ const HomePage = () => {
       </section>
 
       {/* Features Section */}
-      <section className='py-16 bg-white'>
+      <section className='py-16 bg-white dark:bg-gray-800/50 transition-colors duration-300'>
         <div className='container mx-auto px-4'>
           <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
             {/* Feature 1 */}
             <div className='text-center p-6'>
               <div className='text-4xl mb-4'>🚚</div>
-              <h3 className='font-semibold text-gray-800 mb-2'>
+              <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-2'>
                 Free Shipping
               </h3>
-              <p className='text-gray-500 text-sm'>On orders over ₹2000</p>
+              <p className='text-gray-500 dark:text-gray-400 text-sm'>
+                On orders over ₹2000
+              </p>
             </div>
 
             {/* Feature 2 */}
             <div className='text-center p-6'>
               <div className='text-4xl mb-4'>✨</div>
-              <h3 className='font-semibold text-gray-800 mb-2'>
+              <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-2'>
                 100% Authentic
               </h3>
-              <p className='text-gray-500 text-sm'>
+              <p className='text-gray-500 dark:text-gray-400 text-sm'>
                 Genuine products guaranteed
               </p>
             </div>
@@ -199,17 +201,23 @@ const HomePage = () => {
             {/* Feature 3 */}
             <div className='text-center p-6'>
               <div className='text-4xl mb-4'>🔄</div>
-              <h3 className='font-semibold text-gray-800 mb-2'>Easy Returns</h3>
-              <p className='text-gray-500 text-sm'>7-day return policy</p>
+              <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-2'>
+                Easy Returns
+              </h3>
+              <p className='text-gray-500 dark:text-gray-400 text-sm'>
+                7-day return policy
+              </p>
             </div>
 
             {/* Feature 4 */}
             <div className='text-center p-6'>
               <div className='text-4xl mb-4'>💳</div>
-              <h3 className='font-semibold text-gray-800 mb-2'>
+              <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-2'>
                 Secure Payment
               </h3>
-              <p className='text-gray-500 text-sm'>100% secure checkout</p>
+              <p className='text-gray-500 dark:text-gray-400 text-sm'>
+                100% secure checkout
+              </p>
             </div>
           </div>
         </div>

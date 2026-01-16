@@ -10,16 +10,14 @@
  * - You can modify this data anytime
  */
 
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
-const Product = require('./models/Product')
-const Review = require('./models/Review')
-
-// Load environment variables
-dotenv.config()
+const Product = require('../models/Product')
+const Review = require('../models/Review')
+const { connectDB, disconnectDB } = require('../database/service')
 
 // Sample perfume products data
-// These are based on the original template but structured for our database
+// Using reliable Unsplash images for perfume products
+// Each product has unique, high-quality images
+
 const products = [
   // ============ MEN'S PERFUMES ============
   {
@@ -33,9 +31,9 @@ const products = [
     category: 'Men',
     sizes: ['30ml', '50ml', '100ml', '200ml'],
     images: [
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500',
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500'
+      'https://images.unsplash.com/photo-1508771400123-e194ad75c0e3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJlbWl1aW0lMjBwZXJmdW1lJTIwcGhvdG9zfGVufDB8fDB8fHww',
+      'https://images.unsplash.com/photo-1759793500315-e64644e6954c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+      'https://images.unsplash.com/photo-1626008485223-cac13eabf1b0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.5,
     numReviews: 12,
@@ -53,9 +51,9 @@ const products = [
     category: 'Men',
     sizes: ['50ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=500'
+      'https://images.unsplash.com/photo-1704900165490-1e02ec72809c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJlbWl1aW0lMjBwZXJmdW1lJTIwcGhvdG9zfGVufDB8fDB8fHww',
+      ' https://images.unsplash.com/photo-1737424065216-bc51dd626175?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHJlbWl1aW0lMjBwZXJmdW1lJTIwcGhvdG9zfGVufDB8fDB8fHww',
+      'https://images.unsplash.com/photo-1680484155524-1dd89cc4ac09?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.8,
     numReviews: 8,
@@ -73,9 +71,9 @@ const products = [
     category: 'Men',
     sizes: ['40ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=500'
+     'https://images.unsplash.com/photo-1641248775395-2b938a7c099a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://plus.unsplash.com/premium_photo-1757614255517-a73613e4d6a6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://images.unsplash.com/photo-1643797517590-c44cb552ddcc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.2,
     numReviews: 15,
@@ -93,9 +91,9 @@ const products = [
     category: 'Men',
     sizes: ['50ml', '100ml', '150ml'],
     images: [
-      'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500'
+     'https://images.unsplash.com/photo-1759793500315-e64644e6954c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://images.unsplash.com/photo-1651737232635-edfae6d77f68?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjR8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://images.unsplash.com/photo-1604164229905-51db4c30ee8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njd8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.7,
     numReviews: 23,
@@ -113,9 +111,9 @@ const products = [
     category: 'Men',
     sizes: ['50ml', '100ml', '200ml'],
     images: [
-      'https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=500',
-      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500'
+      'https://images.unsplash.com/photo-1623071279663-14b52938bf5f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzF8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://images.unsplash.com/photo-1541108564883-bec8126021f5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzR8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+ 'https://images.unsplash.com/photo-1700473209752-395910c89003?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzZ8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.6,
     numReviews: 18,
@@ -135,9 +133,9 @@ const products = [
     category: 'Women',
     sizes: ['30ml', '50ml', '80ml'],
     images: [
-      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500',
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500'
+      'https://images.unsplash.com/photo-1613521140785-e85e427f8002?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nzl8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+      'https://images.unsplash.com/photo-1611146264101-358a3b387eee?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODd8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+      'https://images.unsplash.com/photo-1748480852876-47b508a0902d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODh8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.9,
     numReviews: 31,
@@ -155,9 +153,11 @@ const products = [
     category: 'Women',
     sizes: ['30ml', '50ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500',
-      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500'
+     'https://images.unsplash.com/photo-1714637641172-76bd99501a1a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTB8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+ 
+     'https://images.unsplash.com/photo-1533603208986-24fd819e718a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTV8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+ 
+     'https://images.unsplash.com/photo-1737424065243-117191bc1345?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTh8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.4,
     numReviews: 14,
@@ -175,9 +175,11 @@ const products = [
     category: 'Women',
     sizes: ['30ml', '50ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500',
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500',
-      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=500'
+      'https://images.unsplash.com/photo-1757313186394-322d29d26a90?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTExfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1746958582485-0316de5197df?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTEyfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1611255680915-114e3414c085?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTE1fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D'
     ],
     rating: 4.6,
     numReviews: 20,
@@ -195,9 +197,11 @@ const products = [
     category: 'Women',
     sizes: ['30ml', '50ml', '80ml'],
     images: [
-      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=500',
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500'
+      'https://images.unsplash.com/photo-1757313239816-9bac11170af8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTE2fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://plus.unsplash.com/premium_photo-1674865345778-fa29c016a67c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTE3fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+  'https://images.unsplash.com/photo-1709095458638-08cef2b85cc0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTIzfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D'
     ],
     rating: 4.7,
     numReviews: 25,
@@ -215,9 +219,11 @@ const products = [
     category: 'Women',
     sizes: ['40ml', '60ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500',
-      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500'
+      'https://images.unsplash.com/photo-1607329128748-886236fb9a2f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMyfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1707899997123-226a3f57aa32?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTM2fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1600612155749-5460e3d2e89e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQyfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D'
     ],
     rating: 4.5,
     numReviews: 17,
@@ -237,9 +243,11 @@ const products = [
     category: 'Unisex',
     sizes: ['100ml'],
     images: [
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500'
+      'https://images.unsplash.com/photo-1663936046049-fe674075681a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTl8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+ 
+      'https://images.unsplash.com/photo-1759793500315-e64644e6954c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+ 
+      'https://images.unsplash.com/photo-1626008485223-cac13eabf1b0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.3,
     numReviews: 28,
@@ -257,9 +265,11 @@ const products = [
     category: 'Unisex',
     sizes: ['30ml', '50ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=500',
-      'https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500'
+      'https://images.unsplash.com/photo-1763986665850-6e66549aa8e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQ4fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1561997837-ad5a1641dbd7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUwfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1592914658737-efc0f615b296?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUxfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D'
     ],
     rating: 4.9,
     numReviews: 45,
@@ -277,9 +287,11 @@ const products = [
     category: 'Unisex',
     sizes: ['30ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1541643600914-78b084683601?w=500'
+      'https://images.unsplash.com/photo-1733660227083-12b78ad0073d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTU4fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://plus.unsplash.com/premium_photo-1669825065302-ef9c8cba1558?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTU3fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://plus.unsplash.com/premium_photo-1752485892414-6656876bf49b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTYxfHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D'
     ],
     rating: 4.7,
     numReviews: 33,
@@ -297,9 +309,9 @@ const products = [
     category: 'Unisex',
     sizes: ['30ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=500',
-      'https://images.unsplash.com/photo-1590736969955-71cc94901144?w=500',
-      'https://images.unsplash.com/photo-1592945403244-b3fbabd7f539?w=500'
+       'https://images.unsplash.com/photo-1587304432009-5b88d3e7146b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTJ8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://images.unsplash.com/photo-1680503504076-e5c61901c36d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTF8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D',
+  'https://images.unsplash.com/photo-1604494319224-9f162a11ae1a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTV8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.6,
     numReviews: 22,
@@ -317,9 +329,11 @@ const products = [
     category: 'Unisex',
     sizes: ['50ml', '100ml'],
     images: [
-      'https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=500',
-      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500',
-      'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=500'
+      'https://images.unsplash.com/photo-1600024914711-3dcb25fa643e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY2fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1600024914711-3dcb25fa643e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY2fHxwcmVtaXVpbSUyMHBlcmZ1bWUlMjBwaG90b3N8ZW58MHx8MHx8fDA%3D',
+ 
+      'https://images.unsplash.com/photo-1622978148095-cfd6b60e4d29?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHByZW1pdWltJTIwcGVyZnVtZSUyMHBob3Rvc3xlbnwwfHwwfHx8MA%3D%3D'
     ],
     rating: 4.8,
     numReviews: 38,
@@ -327,6 +341,7 @@ const products = [
     brand: 'Byredo'
   }
 ]
+
 
 // Sample reviews data
 const sampleReviews = [
@@ -364,9 +379,8 @@ const sampleReviews = [
 // Function to seed the database
 const seedDatabase = async () => {
   try {
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI)
-    console.log('✅ Connected to MongoDB')
+    // Connect to MongoDB using centralized service
+    await connectDB()
 
     // Clear existing data
     await Product.deleteMany({})
@@ -404,3 +418,4 @@ const seedDatabase = async () => {
 
 // Run the seed function
 seedDatabase()
+

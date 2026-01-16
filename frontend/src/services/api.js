@@ -63,9 +63,26 @@ export const getProductsByCategory = async category => {
 export const getProductById = async productId => {
   try {
     const response = await api.get(`/products/${productId}`)
+    console.log('api response from getProductById', response.data)
     return response.data
   } catch (error) {
     console.error('Error fetching product:', error)
+    throw error
+  }
+}
+
+/**
+ * Search products by name or brand
+ * Used on: Navbar search bar
+ */
+export const searchProducts = async query => {
+  try {
+    const response = await api.get(
+      `/products/search/${encodeURIComponent(query)}`
+    )
+    return response.data
+  } catch (error) {
+    console.error('Error searching products:', error)
     throw error
   }
 }
@@ -94,7 +111,8 @@ export const getProductReviews = async productId => {
  */
 export const addReview = async reviewData => {
   try {
-    const response = await api.post('/reviews', reviewData)
+    const response = await api.post('/reviews/addReview', reviewData)
+    console.log('api response from addReview', response.data)
     return response.data
   } catch (error) {
     console.error('Error adding review:', error)

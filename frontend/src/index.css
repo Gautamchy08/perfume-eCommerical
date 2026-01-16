@@ -1,1 +1,407 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================
+   THEME VARIABLES (Light/Dark Mode)
+   ============================================ */
+
+:root {
+  /* Light Theme (default) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --bg-card: #ffffff;
+  --bg-hover: #f3f4f6;
+
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --text-muted: #9ca3af;
+
+  --border-color: #e5e7eb;
+  --border-hover: #d1d5db;
+
+  --accent-primary: #9333ea;
+  --accent-secondary: #ec4899;
+  --accent-gradient: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  --skeleton-base: #f0f0f0;
+  --skeleton-shine: #e0e0e0;
+}
+
+.dark {
+  /* Dark Theme */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #262626;
+  --bg-card: #1a1a1a;
+  --bg-hover: #262626;
+
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #d1d5db;
+  --text-muted: #9ca3af;
+
+  --border-color: #374151;
+  --border-hover: #4b5563;
+
+  --accent-primary: #a855f7;
+  --accent-secondary: #f472b6;
+  --accent-gradient: linear-gradient(135deg, #a855f7 0%, #f472b6 100%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+
+  --skeleton-base: #262626;
+  --skeleton-shine: #374151;
+}
+
+/* Theme transition for smooth mode switching */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.2s ease;
+}
+
+/* ============================================
+   SKELETON SHIMMER ANIMATION
+   ============================================ */
+
+/* Beautiful shimmer effect for loading skeletons */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-shine) 50%,
+    var(--skeleton-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Premium shimmer with purple tint */
+.skeleton-shimmer-purple {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #f5f3f7 25%, #e8e0f0 50%, #f5f3f7 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.dark .skeleton-shimmer-purple {
+  background: linear-gradient(90deg, #1f1f2e 25%, #2d2d44 50%, #1f1f2e 75%);
+}
+
+/* ============================================
+   GLOBAL BACKGROUND GRADIENT
+   ============================================ */
+
+/* Light mode background */
+:root body,
+.light body {
+  background: linear-gradient(
+    135deg,
+    #fdfbfb 0%,
+    #ebedee 25%,
+    #e8e0f0 50%,
+    #f5f3f7 75%,
+    #ffffff 100%
+  );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Dark mode background */
+.dark body {
+  background: linear-gradient(
+    135deg,
+    #0a0a0a 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #1a1a2e 75%,
+    #0f0f0f 100%
+  );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Decorative gradient orbs (floating background elements) */
+.gradient-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.dark .gradient-orb {
+  opacity: 0.2;
+}
+
+.gradient-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+  top: -100px;
+  right: -100px;
+}
+
+.gradient-orb-2 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  bottom: 20%;
+  left: -100px;
+}
+
+.gradient-orb-3 {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+  bottom: -50px;
+  right: 20%;
+}
+
+/* ============================================
+   CUSTOM ANIMATIONS FOR ELEGANT UI
+   ============================================ */
+
+/* Shimmer effect for images */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Floating animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Pulse glow effect */
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.6);
+  }
+}
+
+/* Slide in from bottom */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Rotate shine effect */
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ============================================
+   PRODUCT CARD STYLES
+   ============================================ */
+
+/* Image hover with elegant Ken Burns effect */
+.product-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  z-index: 10;
+  pointer-events: none;
+  transition: left 0.5s ease;
+}
+
+.product-image-container:hover::before {
+  animation: shine 0.8s ease forwards;
+}
+
+.product-image {
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.5s ease;
+}
+
+.product-image-container:hover .product-image {
+  transform: scale(1.08) rotate(1deg);
+  filter: brightness(1.05) saturate(1.1);
+}
+
+/* Card lift effect */
+.product-card {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(147, 51, 234, 0.15),
+    0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Action buttons with stagger animation */
+.action-buttons button,
+.action-buttons a {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.product-card:hover .action-buttons button,
+.product-card:hover .action-buttons a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.action-buttons button:nth-child(1),
+.action-buttons a:nth-child(1) {
+  transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+}
+
+.action-buttons button:nth-child(2),
+.action-buttons a:nth-child(2) {
+  transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+}
+
+.action-buttons button:nth-child(3),
+.action-buttons a:nth-child(3) {
+  transition: opacity 0.3s ease 0.3s, transform 0.3s ease 0.3s;
+}
+
+/* Button hover ripple effect */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-ripple:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ============================================
+   PRODUCT PAGE STYLES
+   ============================================ */
+
+/* Main image elegant zoom */
+.main-product-image {
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.5s ease;
+}
+
+.main-product-image:hover {
+  transform: scale(1.05);
+  filter: brightness(1.02) contrast(1.02);
+}
+
+/* Thumbnail hover effect */
+.thumbnail {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.3);
+}
+
+/* Badge animation */
+.badge-animate {
+  animation: slideUp 0.5s ease forwards;
+}
+
+/* Floating animation for icons */
+.float-animate {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glow effect for active elements */
+.glow-effect {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   SMOOTH SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9333ea, #7c3aed);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7c3aed, #6d28d9);
+}
