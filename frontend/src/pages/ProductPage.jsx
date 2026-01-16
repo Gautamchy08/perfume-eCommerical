@@ -467,7 +467,7 @@ const ProductPage = () => {
             <div className='lg:col-span-1'>
               <div className='bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6'>
                 <h3 className='font-semibold text-gray-800 dark:text-gray-100 mb-4'>
-                  Write a Review
+                  Write a Review 
                 </h3>
                 <form onSubmit={handleReviewSubmit} className='space-y-4'>
                   {/* Name Input */}
