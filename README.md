@@ -27,6 +27,11 @@
 - **Routing:**  
 	- Home and product detail pages
 
+- **Skeleton Loading Components:**
+	- Custom skeletons for product cards, product page, and images to enhance perceived performance during data loading.
+- **Responsive Design:**
+	- Fully responsive layout using Tailwind CSS, optimized for mobile, tablet, and desktop screens.
+
 ---
 
 ## Backend
