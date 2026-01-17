@@ -1,19 +1,4 @@
-/**
- * Product Card Component
- *
- * This component displays a single product in a card format.
- * Used on the homepage to show multiple products in a grid.
- *
- * FEATURES:
- * - Product image with hover effect (shows second image)
- * - Product name, description, price
- * - Star rating
- * - Hover effects for interactivity
- * - Click redirects to product detail page
- *
- * PROPS:
- * - product: Object containing all product details
- */
+
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'

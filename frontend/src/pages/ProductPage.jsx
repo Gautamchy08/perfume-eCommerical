@@ -130,12 +130,7 @@ const ProductPage = () => {
       return
     }
 
-    console.log('Sending review data:', {
-      productId: id,
-      userName: reviewForm.userName,
-      rating: parseInt(reviewForm.rating),
-      comment: reviewForm.comment
-    }) // Debug log
+    
 
     try {
       setSubmittingReview(true)
@@ -148,7 +143,6 @@ const ProductPage = () => {
         comment: reviewForm.comment
       })
 
-      console.log('API Response:', response) // Debug log
 
       if (response.success) {
         // Add new review to the list
@@ -164,7 +158,6 @@ const ProductPage = () => {
         toast.success('Review added successfully! 🎉')
       }
     } catch (err) {
-      console.error('Error adding review:', err)
       toast.error('Failed to add review. Please try again.')
     } finally {
       setSubmittingReview(false)
@@ -204,7 +197,7 @@ const ProductPage = () => {
 
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl)
-    alert('Link copied to clipboard!')
+    toast.success('Link copied to clipboard!')
   }
 
   // Loading state - Show skeleton
@@ -251,7 +244,7 @@ const ProductPage = () => {
             {/* Left Side - Image Gallery */}
             <div className='space-y-4'>
               {/* Main Image with Elegant Effect */}
-              <div className='product-image-container aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 shadow-inner'>
+              <div className='product-image-container aspect-square rounded-2xl overflow-hidden bg-linear-to-br from-gray-100 to-gray-50 shadow-inner'>
                 <img
                   src={product.images[selectedImage]}
                   alt={product.name}
@@ -265,7 +258,7 @@ const ProductPage = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`thumbnail flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 ${
+                    className={`thumbnail shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 ${
                       selectedImage === index
                         ? 'border-purple-600 shadow-lg glow-effect scale-105'
                         : 'border-gray-200 hover:border-purple-400'
@@ -382,7 +375,7 @@ const ProductPage = () => {
               <div className='flex flex-wrap gap-4 pt-4'>
                 {/* Add to Cart */}
                 <motion.button
-                  className='flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full font-semibold flex items-center justify-center gap-2 shadow-lg'
+                  className='flex-1 bg-linear-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full font-semibold flex items-center justify-center gap-2 shadow-lg'
                   whileHover={{
                     y:-4,
                     scale: 1.1,
@@ -525,7 +518,7 @@ const ProductPage = () => {
                   <motion.button
                     type='submit'
                     disabled={submittingReview}
-                    className='w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-xl font-semibold shadow-lg disabled:opacity-50'
+                    className='w-full bg-linear-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-xl font-semibold shadow-lg disabled:opacity-50'
                     whileHover={{
                       scale: 1.02,
                       boxShadow: '0 10px 30px rgba(147, 51, 234, 0.4)'

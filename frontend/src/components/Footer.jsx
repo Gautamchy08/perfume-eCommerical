@@ -7,7 +7,6 @@
  * - Quick links
  * - Contact information
  * - Social media links
- * - Newsletter subscription
  */
 
 import { Link } from 'react-router-dom'

@@ -3,9 +3,9 @@
 /* Enable class-based dark mode for Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ============================================
+/* 
    THEME VARIABLES (Light/Dark Mode)
-   ============================================ */
+    */
 
 :root {
   /* Light Theme (default) */
@@ -69,9 +69,9 @@
     color 0.2s ease;
 }
 
-/* ============================================
+/* 
    SKELETON SHIMMER ANIMATION
-   ============================================ */
+    */
 
 /* Beautiful shimmer effect for loading skeletons */
 .skeleton-shimmer {
@@ -109,9 +109,9 @@
   background: linear-gradient(90deg, #1f1f2e 25%, #2d2d44 50%, #1f1f2e 75%);
 }
 
-/* ============================================
+/* 
    GLOBAL BACKGROUND GRADIENT
-   ============================================ */
+    */
 
 /* Light mode background */
 :root body,
@@ -181,9 +181,9 @@
   right: 20%;
 }
 
-/* ============================================
+/* 
    CUSTOM ANIMATIONS FOR ELEGANT UI
-   ============================================ */
+    */
 
 /* Shimmer effect for images */
 @keyframes shimmer {
@@ -239,9 +239,9 @@
   }
 }
 
-/* ============================================
+/* 
    PRODUCT CARD STYLES
-   ============================================ */
+    */
 
 /* Image hover with elegant Ken Burns effect */
 .product-image-container {
@@ -345,9 +345,9 @@
   height: 300px;
 }
 
-/* ============================================
+/* 
    PRODUCT PAGE STYLES
-   ============================================ */
+    */
 
 /* Main image elegant zoom */
 .main-product-image {
@@ -385,9 +385,7 @@
   animation: pulseGlow 2s ease-in-out infinite;
 }
 
-/* ============================================
-   SMOOTH SCROLLBAR
-   ============================================ */
+/*   SMOOTH SCROLLBAR  */
 
 ::-webkit-scrollbar {
   width: 8px;

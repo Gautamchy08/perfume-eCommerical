@@ -1,25 +1,17 @@
 /**
  * Seed Data Script
- *
- * This file populates your MongoDB database with sample perfume products.
- * Run this once to add mock data: npm run seed
- *
- * WHY WE NEED THIS:
- * - The assignment requires data to come from database, not hardcoded
- * - This creates realistic sample data for testing
- * - You can modify this data anytime
+  
+ * used to add the mock data to the database
  */
 
 const Product = require('../models/Product')
 const Review = require('../models/Review')
-const { connectDB, disconnectDB } = require('../database/service')
+const { connectDB } = require('../database/service')
 
 // Sample perfume products data
-// Using reliable Unsplash images for perfume products
-// Each product has unique, high-quality images
 
 const products = [
-  // ============ MEN'S PERFUMES ============
+  //  MEN'S PERFUMES 
   {
     name: 'Versace Dylan Blue',
     shortDescription:
@@ -121,7 +113,7 @@ const products = [
     brand: 'Hugo Boss'
   },
 
-  // ============ WOMEN'S PERFUMES ============
+  //  WOMEN'S PERFUMES 
   {
     name: 'Carolina Herrera Good Girl',
     shortDescription:
@@ -231,7 +223,7 @@ const products = [
     brand: 'Jimmy Choo'
   },
 
-  // ============ UNISEX PERFUMES ============
+  //  UNISEX PERFUMES 
   {
     name: 'Calvin Klein CK One Summer',
     shortDescription:
@@ -385,11 +377,10 @@ const seedDatabase = async () => {
     // Clear existing data
     await Product.deleteMany({})
     await Review.deleteMany({})
-    console.log('🗑️  Cleared existing data')
+    console.log('  Cleared existing data')
 
     // Insert products
     const createdProducts = await Product.insertMany(products)
-    console.log(`📦 Added ${createdProducts.length} products`)
 
     // Add sample reviews to each product
     for (const product of createdProducts) {
@@ -406,7 +397,7 @@ const seedDatabase = async () => {
         })
       }
     }
-    console.log('⭐ Added sample reviews')
+    console.log(' Added sample reviews')
 
     console.log('✅ Database seeded successfully!')
     process.exit(0)

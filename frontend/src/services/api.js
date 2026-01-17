@@ -1,13 +1,12 @@
 /**
  * API Service
- *
  * This file handles all communication with our backend server.
  * Instead of writing fetch/axios calls everywhere, we centralize them here.
- *
+ * 
  * WHY THIS IS USEFUL:
- * - One place to change the API URL if needed
- * - Reusable functions across components
- * - Easier to debug and maintain
+ *  One place to change the API URL if needed
+ *  Reusable functions across components
+ *  Easier to debug and maintain
  */
 
 import axios from 'axios'
@@ -24,9 +23,7 @@ const api = axios.create({
   }
 })
 
-// ============================================
 // PRODUCT API FUNCTIONS
-// ============================================
 
 /**
  * Get all products from the database
@@ -87,9 +84,7 @@ export const searchProducts = async query => {
   }
 }
 
-// ============================================
 // REVIEW API FUNCTIONS
-// ============================================
 
 /**
  * Get all reviews for a specific product

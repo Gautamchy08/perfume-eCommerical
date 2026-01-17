@@ -1,27 +1,14 @@
-//  const { connectDB } = require('../database/service')
 /**
  * Product Controller
- *
  * This file contains all the business logic for product-related operations.
  * Controllers handle the "what to do" part - they process requests and send responses.
- *
- * WHY SEPARATE CONTROLLERS?
- * - Routes only define URLs (WHERE)
- * - Controllers define logic (WHAT)
- * - Makes code cleaner and easier to maintain
- * - Easier to test individual functions
- * - Follows MVC (Model-View-Controller) pattern
+
  */
 
-// await connectDB()
 
 const Product = require('../models/Product')
 
-/**
- * @desc    Get all products
- * @route   GET /api/products
- * @access  Public
- */
+//   get all products
 const getAllProducts = async (req, res) => {
   try {
     // Find all products in the database
@@ -41,12 +28,7 @@ const getAllProducts = async (req, res) => {
     })
   }
 }
-
-/**
- * @desc    Get products by category (Men, Women, Unisex)
- * @route   GET /api/products/category/:category
- * @access  Public
- */
+//   get products by category
 const getProductsByCategory = async (req, res) => {
   try {
     const { category } = req.params
@@ -67,12 +49,8 @@ const getProductsByCategory = async (req, res) => {
     })
   }
 }
+// Get a single product by its ID
 
-/**
- * @desc    Get single product by ID
- * @route   GET /api/products/:id
- * @access  Public
- */
 const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
@@ -97,12 +75,8 @@ const getProductById = async (req, res) => {
     })
   }
 }
-
-/**
- * @desc    Search products by name or brand
- * @route   GET /api/products/search/:query
- * @access  Public
- */
+ 
+// Search products by name or brand or description
 const searchProducts = async (req, res) => {
   try {
     const { query } = req.params

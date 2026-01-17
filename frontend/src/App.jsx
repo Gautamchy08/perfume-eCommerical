@@ -1,17 +1,4 @@
-/**
- * App.jsx - Main Application Component
- *
- * This is the root component of our React application.
- * It sets up:
- * 1. React Router for navigation between pages
- * 2. Layout structure (Navbar at top, content in middle, Footer at bottom)
- * 3. Route definitions (which URL shows which page)
- * 4. Theme Provider for dark/light mode
- *
- * ROUTING:
- * - "/" → HomePage (shows all products)
- * - "/product/:id" → ProductPage (shows single product details)
- */
+import React from 'react'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'

@@ -4,10 +4,7 @@
  * This file ONLY defines the API endpoints (URLs) for products.
  * The actual logic is in the controller file.
  *
- * CLEAN ARCHITECTURE:
- * - Routes → Define WHERE (URLs)
- * - Controllers → Define WHAT (Logic)
- * - Models → Define HOW (Database structure)
+
  *
  * API Endpoints:
  * - GET /api/products              → Get all products
@@ -28,7 +25,7 @@ const {
 
 // Define routes and connect them to controller functions
 router.get('/', getAllProducts)
-router.get('/search/:query', searchProducts) // Search must be before :id to avoid conflict
+router.get('/search/:query', searchProducts) 
 router.get('/category/:category', getProductsByCategory)
 router.get('/:id', getProductById)
 

@@ -1,8 +1,7 @@
 /**
  * Review Routes
  *
- * This file ONLY defines the API endpoints (URLs) for reviews.
- * The actual logic is in the controller file.
+ 
  *
  * API Endpoints:
  * - GET /api/reviews/:productId    → Get all reviews for a product
@@ -12,7 +11,6 @@
 const express = require('express')
 const router = express.Router()
 
-// Import controller functions
 const {
   getProductReviews,
   addReview

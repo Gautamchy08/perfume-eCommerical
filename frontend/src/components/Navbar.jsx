@@ -1,16 +1,14 @@
 /**
  * Navbar Component
- *
- * This is the navigation bar that appears at the top of every page.
  * It includes:
- * - Logo
- * - Navigation links (Home, Shop, Categories)
- * - Search bar with live search results
- * - Cart and Wishlist icons
+ *  Logo
+ *  Navigation links (Home, Shop, Categories)
+ *  Search bar with live search results
+ *  Cart and Wishlist icons
  *
  * RESPONSIVE DESIGN:
- * - On desktop: Full horizontal menu
- * - On mobile: Hamburger menu that slides in
+ *  On desktop: Full horizontal menu
+ *  On mobile: Hamburger menu that slides in
  */
 
 import { useState, useEffect, useRef } from 'react'
@@ -100,13 +98,7 @@ const Navbar = () => {
 
   return (
     <nav className='bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-900/50 sticky top-0 z-50 transition-colors duration-300'>
-      {/* Top bar with contact info */}
-      {/* <div className='bg-linear-to-r from-purple-900 via-purple-800 to-pink-700 text-white py-2 hidden md:block'>
-        <div className='container mx-auto px-4 flex justify-between items-center text-sm'>
-          <span>📞 +91 9876543210 | ✉️ support@perfumeshop.com</span>
-          <span>🚚 Free shipping on orders over ₹2000</span>
-        </div>
-      </div> */}
+    
 
       {/* Main navbar */}
       <div className='container mx-auto px-4'>
@@ -124,22 +116,22 @@ const Navbar = () => {
             <MotionLink
               to='/'
               className='text-gray-700 dark:text-gray-200 font-medium'
-              whileHover={{ scale: 1.3, color: '#9333ea',rotate:-20 }}
+              whileHover={{ scale: 1.3, color: '#9333ea',  }}
               whileTap={{ scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 400,  damping: 17 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               Home
             </MotionLink>
             <motion.div
               className='relative group'
-              whileHover={{ scale: 1.05,rotate:20 }}
+              whileHover={{ scale: 1.05, }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               <span className='text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 font-medium cursor-pointer transition-colors'>
                 Categories
               </span>
               {/* Dropdown menu */}
-              <div className='absolute top-full left-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300'>
+              <div className='absolute top-full left-0 pt-2 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300'>
                 <Link
                   to='/?category=Men'
                   className='block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-600 dark:hover:text-purple-400'
@@ -163,7 +155,7 @@ const Navbar = () => {
             <MotionLink
               to='/'
               className='text-gray-700 dark:text-gray-200 font-medium'
-              whileHover={{ scale: 1.3, color: '#9333ea',rotate:-20 }}
+              whileHover={{ scale: 1.3, color: '#9333ea',  }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
@@ -172,7 +164,7 @@ const Navbar = () => {
             <MotionLink
               to='/'
               className='text-gray-700 dark:text-gray-200 font-medium'
-              whileHover={{ scale: 1.3, color: '#9333ea',rotate:20 }}
+              whileHover={{ scale: 1.3, color: '#9333ea',  }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
@@ -295,7 +287,13 @@ const Navbar = () => {
               className='text-gray-700 dark:text-gray-200 hover:text-pink-500 relative'
               whileHover={{ scale: 1.2, rotate: -20 }}
               whileTap={{ scale: 0.9 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17, repeatType: 'mirror', duration: 0.6 }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 17,
+                repeatType: 'mirror',
+                duration: 0.6
+              }}
             >
               <FaHeart size={20} />
               <span className='absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center'>
@@ -308,7 +306,13 @@ const Navbar = () => {
               className='text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 transition-colors relative'
               whileHover={{ scale: 1.2, rotate: -10 }}
               whileTap={{ scale: 0.9 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17, repeatType: 'mirror', duration: 0.6 }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 17,
+                repeatType: 'mirror',
+                duration: 0.6
+              }}
             >
               <FaShoppingCart size={20} />
               <span className='absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center'>

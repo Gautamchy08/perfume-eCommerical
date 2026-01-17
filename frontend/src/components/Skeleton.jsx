@@ -1,9 +1,4 @@
-/**
- * Skeleton Loading Components
- *
- * Beautiful shimmer loading placeholders that show while content is loading.
- * Creates a premium feel and improves perceived performance.
- */
+
 
 import { motion } from 'framer-motion'
 

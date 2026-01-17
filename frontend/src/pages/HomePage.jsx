@@ -3,10 +3,10 @@
  *
  * This is the main landing page of the website.
  * It displays:
- * - Hero Banner (CTA)
+ * - Hero Banner 
  * - Category filter tabs (Men, Women, Unisex)
  * - Product cards grid
- *
+ 
  * DATA FLOW:
  * 1. Page loads → useEffect runs
  * 2. Fetches products from backend API

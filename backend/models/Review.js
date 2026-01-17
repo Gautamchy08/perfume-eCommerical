@@ -1,8 +1,7 @@
 /**
  * Review Model
  *
- * This file defines the structure for storing product reviews in MongoDB.
- * Each review is linked to a specific product using the productId.
+ 
  *
  * Each review will have:
  * - productId: Reference to which product this review belongs to
@@ -48,7 +47,6 @@ const reviewSchema = new mongoose.Schema(
     }
   },
   {
-    // Automatically add createdAt and updatedAt fields
     timestamps: true
   }
 )

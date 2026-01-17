@@ -1,6 +1,5 @@
 /**
  * Review Controller
- *
  * This file contains all the business logic for review-related operations.
  * Handles getting reviews and adding new reviews for products.
  */
@@ -8,11 +7,7 @@
 const Review = require('../models/Review')
 const Product = require('../models/Product')
 
-/**
- * @desc    Get all reviews for a specific product
- * @route   GET /api/reviews/:productId
- * @access  Public
- */
+//  Get all reviews for a specific product
 const getProductReviews = async (req, res) => {
   try {
     // Find reviews for this product, newest first
@@ -34,11 +29,7 @@ const getProductReviews = async (req, res) => {
   }
 }
 
-/**
- * @desc    Add a new review for a product
- * @route   POST /api/reviews
- * @access  Public
- */
+//  Add a new review for a product
 const addReview = async (req, res) => {
   try {
     const { productId, userName, rating, comment } = req.body

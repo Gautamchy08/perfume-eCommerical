@@ -1,9 +1,6 @@
 /**
  * Product Model
  *
- * This file defines the structure (schema) for storing perfume products in MongoDB.
- * Think of a schema like a blueprint that tells MongoDB what data to expect.
- *
  * Each product will have:
  * - name: The perfume name
  * - description: Short description for card, full description for product page
@@ -103,13 +100,11 @@ const productSchema = new mongoose.Schema(
     }
   },
   {
-    // Automatically add createdAt and updatedAt fields
     timestamps: true
   }
 )
 
 // Create and export the model
-// mongoose.model('Product', productSchema) creates a collection called 'products' in MongoDB
 const Product = mongoose.model('Product', productSchema)
 
 module.exports = Product

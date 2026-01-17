@@ -1,6 +1,6 @@
 /**
  * Theme Context
- *
+ 
  * Manages dark/light mode across the entire application.
  * - Stores theme preference in localStorage
  * - Provides toggle function to switch themes
@@ -59,7 +59,7 @@ export const ThemeProvider = ({ children }) => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
   }
 
-  // Set specific theme => frocely want to set some theme
+  // Set specific theme => forcely want to set some theme
   const setThemeMode = mode => {
     setTheme(mode)
   }

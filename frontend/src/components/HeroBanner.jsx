@@ -88,14 +88,14 @@ const HeroBanner = () => {
                 <MotionLink
                   to='/'
                   className='bg-pink-500 hover:bg-white hover:text-purple-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform  shadow-lg'
-                  whileHover={{scale:1.10,rotate:-10}}
+                  whileHover={{scale:1.10,}}
                    whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                 >
                   Shop Now
                 </MotionLink>
                 <MotionLink
-                  whileHover={{scale:1.10,rotate:-10}}
+                  whileHover={{scale:1.10,}}
                    whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                   to='/'
